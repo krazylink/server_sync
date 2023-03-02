@@ -45,14 +45,20 @@ var createCmd = &cobra.Command{
 			creator = &defaultChannelCreator{&cre}
 			data.Name, _ = c.Flags().GetString("name")
 			data.Type = Type
-			data.Topic, _ = c.Flags().GetString("topic")
+			if data.Type == discordgo.ChannelTypeGuildText || data.Type == discordgo.ChannelTypeGuildNews || data.Type == discordgo.ChannelTypeGuildForum {
+				data.Topic, _ = c.Flags().GetString("topic")
+			}
 			data.Bitrate, _ = c.Flags().GetInt("bitrate")
 			data.UserLimit, _ = c.Flags().GetInt("user_limit")
 			data.RateLimitPerUser, _ = c.Flags().GetInt("rate_limit_per_user")
 			data.Position, _ = c.Flags().GetInt("position")
 			//TODO(krazylink): impliment this flag
 			//data.PermissionOverwrites = c.Flags().
-			data.ParentID, _ = c.Flags().GetString("parent_id")
+			if data.Type != discordgo.ChannelTypeGuildCategory {
+				data.ParentID, _ = c.Flags().GetString("parent_id")
+			} else {
+				log.Println("Type Category can not have parent. Ignoring parent_id.")
+			}
 			data.NSFW, _ = c.Flags().GetBool("nsfw")
 		}
 		creator.createChannel(cmd.Session, guild_id, data)

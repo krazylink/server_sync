@@ -22,9 +22,10 @@ func init() {
 	cmd.RootCmd.AddCommand(channelCmd)
 	channelCmd.PersistentFlags().StringVarP(
 		&guild_id,
-		"guildID",
+		"guild_id",
 		"g",
-		"1072385994097168394",
+		"",
 		"Discord guild (server) id",
 	)
+	channelCmd.MarkPersistentFlagRequired("guild_id")
 }
